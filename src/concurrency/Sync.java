@@ -25,8 +25,16 @@ class Sync extends Thread {
         Sync syncThread = new Sync("sync thread");
         syncThread.start();
 
+        try {
+            syncThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         System.out.println(syncThread.nums);
-        //this prints out an empty list. write some code that will allow the data generated in the syncThread to show up  here.  There is a brute force way and a more sophisticated way.  Either or will work, but strive for sophistication :)
+        //this prints out an empty list. write some code that will allow the data generated in the syncThread
+        // to show up  here.  There is a brute force way and a more sophisticated way.  Either or will work,
+        // but strive for sophistication :)
 
     }
     
