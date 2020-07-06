@@ -2,6 +2,7 @@ package lambda_streams;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,10 +35,57 @@ class Animals {
 
         System.out.println(flipAnimals(true));
 
+        takeListReturnList capsFirst2 = animals -> {
+            animals.stream()
+                    .map(String::toLowerCase)
+                    .map(animal -> animal.substring(0, 1).toUpperCase() + animal.substring(1))
+                    .collect(Collectors.toList());
+            return animals;
+        };
 
+        capsFirstLambda(animals, capsFirst2);
 
-        
+        takeListReturnList lowerFirst2 = animals -> {
+            animals = animals.stream()
+                    .map(String::toUpperCase)
+                    .map(animal -> animal.substring(0, 1).toLowerCase() + animal.substring(1))
+                    .collect(Collectors.toList());
+            //Stream.of(animals).map(String::toLowerCase).collect(Collectors.toList());
+            return animals;
+        };
 
+        lowerFirstLambda(animals, lowerFirst2);
+
+        takeListReturnList flippedAnimals2 = animals -> {
+            List<String> flippedAnimals = new ArrayList<>();
+            animals.stream()
+                    .forEach(animal -> flippedAnimals.add(0, animal));
+            animals = flippedAnimals;
+            return animals;
+        };
+
+        flipAnimalsLambda(animals, flippedAnimals2);
+
+        takeListReturnList sortAnimals2 = animals -> {
+            animals = animals.stream()
+                    .map(animal -> animal.toLowerCase())
+                    .sorted()
+                    .collect(Collectors.toList());
+            return animals;
+        };
+
+        sortAnimalsLambda(animals, sortAnimals2);
+        bonusSortAnimals(animals, "reverse alphabetical");
+
+    }
+
+    interface takeListReturnList {
+        List<String> takeAction(List<String> list);
+    }
+
+    static List<String> capsFirstLambda(List<String> animals, takeListReturnList capsFirst) {
+        System.out.println("Caps First Lambda: " + capsFirst.takeAction(animals));
+        return animals;
     }
 
     static List<String> capsFirst(List<String> animaList, boolean mutate) {
@@ -75,6 +123,10 @@ class Animals {
         return animal;
     };
 
+    static List<String> lowerFirstLambda(List<String> animals, takeListReturnList lowerFirst) {
+        System.out.println("Lower First Lambda: " + lowerFirst.takeAction(animals));
+        return animals;
+    }
 
     static List<String> lowerFirst(List<String> animaList, boolean mutate) {
         // lowercase the first letter, and uppercase the rest of the letters, using streams.  Also, depending
@@ -97,6 +149,11 @@ class Animals {
         }
     }
 
+    static List<String> flipAnimalsLambda(List<String> animals, takeListReturnList flipAnimals) {
+        System.out.println("Flipped Animals Lambda: " + flipAnimals.takeAction(animals));
+        return animals;
+    }
+
     static List<String> flipAnimals(boolean mutate) {
         // reverse the order of the animals in the animal list.  If the booleaen parameter is true, reverse the
         // static animals array list by mutating the array.  if the mutate boolean is false, flip a 'copy' of
@@ -117,6 +174,10 @@ class Animals {
         return flippedAnimals;
     }
 
+    static List<String> sortAnimalsLambda(List<String> animals, takeListReturnList sortAnimals) {
+        System.out.println("Sorted animals: " + sortAnimals.takeAction(animals));
+        return animals;
+    }
 
     static List<String> sortAnimals(boolean mutate) {
         // sort the animals in alphabetical order.  If the booleaen parameter is true, mutating the animals
@@ -135,6 +196,26 @@ class Animals {
                 .sorted()
                 .collect(Collectors.toList());
     return newAnimals;
+    }
+
+    static List<String> bonusSortAnimals(List<String> animals, String choice) {
+        switch(choice.toLowerCase()) {
+            case "alphabetical":
+                animals = animals.stream()
+                        .map(animal -> animal.toLowerCase())
+                        .sorted()
+                        .collect(Collectors.toList());
+                System.out.println(choice + ": " + animals);
+                return animals;
+            case "reverse alphabetical":
+                animals = animals.stream()
+                        .map(animal -> animal.toLowerCase())
+                        .sorted(Comparator.reverseOrder())
+                        .collect(Collectors.toList());
+                System.out.println(choice + ": " + animals);
+                return animals;
+        }
+        return animals;
     }
 
 
