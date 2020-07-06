@@ -1,6 +1,9 @@
 package lambda_streams;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 class Animals {
     //This class will be using streams.
@@ -9,7 +12,8 @@ class Animals {
     public static void main(String[] args) {
         System.out.println("original animals : " + animals);
 
-        //clean up the animals array by using the capsFirst() method. follow instructions in the method definition. 
+        // clean up the animals array by using the capsFirst() method. follow instructions in the method
+        // definition.
         List<String> cleaned = capsFirst(animals, false);
         System.out.println(cleaned);
        
@@ -20,42 +24,117 @@ class Animals {
         addAnimal("lEOpArD");
         //---------------------------------------
 
+        System.out.println(sortAnimals(false));
+
         capsFirst(animals,true);
         System.out.println(animals);
 
         List<String> lowered = lowerFirst(animals,false);
         System.out.println(lowered);
 
+        System.out.println(flipAnimals(true));
+
+
+
         
 
     }
 
     static List<String> capsFirst(List<String> animaList, boolean mutate) {
-        //clean up the animals list so that the first letter is capitalized, and all the other letters are lowercased. Use a stream to accomplish this task.  Also, the 2nd parameter of this function is a boolean.  use this boolean 'flag' to determine whether or not to 'mutate' the original animals array stored as a static class field.  if the flag is set to 'true', mutate the animals and return the animals out of the function.  if it is false, create a copy of the animals, perform your stream operations on the copy, and return the copy of animals out of the function, WITHOUT modifying the original animals array.  
-        return animals;
+        // clean up the animals list so that the first letter is capitalized, and all the other letters are
+        // lowercased. Use a stream to accomplish this task.  Also, the 2nd parameter of this function is a
+        // boolean.  use this boolean 'flag' to determine whether or not to 'mutate' the original animals array
+        // stored as a static class field.  if the flag is set to 'true', mutate the animals and return the
+        // animals out of the function.  if it is false, create a copy of the animals, perform your stream
+        // operations on the copy, and return the copy of animals out of the function, WITHOUT modifying the
+        // original animals array.
+
+        if (mutate) {
+            animals = animals.stream()
+                    .map(String::toLowerCase)
+                    .map(animal -> animal.substring(0, 1).toUpperCase() + animal.substring(1))
+                    .collect(Collectors.toList());
+            //Stream.of(animals).map(String::toLowerCase).collect(Collectors.toList());
+            return animals;
+        }
+        else {
+            List<String> newAnimalList = animals.stream()
+                    .map(String::toLowerCase)
+                    .map(animal -> animal.substring(0, 1).toUpperCase() + animal.substring(1))
+                    .collect(Collectors.toList());
+
+            return newAnimalList;
+        }
     }
 
     static String addAnimal(String animal) {
         //add an animal to the animal list.
+        List<String> newAnimals = animals.stream().collect(Collectors.toList());    // Convert animals to a List (because right now it's basically an array and nothing can be added to it.
+        newAnimals.add(animal);
+        animals = newAnimals;
         return animal;
     };
 
 
     static List<String> lowerFirst(List<String> animaList, boolean mutate) {
-        //lowercase the first letter, and uppercase the rest of the letters, using streams.  Also, depending on the value of the boolean flag 'mutate', mutate the original animals list, or perform your stream operations on a 'copy' of the animals list.  return the list out of hte function in both cases.
-        return animaList;
+        // lowercase the first letter, and uppercase the rest of the letters, using streams.  Also, depending
+        // on the value of the boolean flag 'mutate', mutate the original animals list, or perform your stream
+        // operations on a 'copy' of the animals list.  return the list out of hte function in both cases.
+        if (mutate) {
+            animaList = animaList.stream()
+                    .map(String::toUpperCase)
+                    .map(animal -> animal.substring(0, 1).toLowerCase() + animal.substring(1))
+                    .collect(Collectors.toList());
+            //Stream.of(animals).map(String::toLowerCase).collect(Collectors.toList());
+            return animaList;
+        }
+        else {
+            List<String> newAnimalList = animals.stream()
+                    .map(String::toUpperCase)
+                    .map(animal -> animal.substring(0, 1).toLowerCase() + animal.substring(1))
+                    .collect(Collectors.toList());
+            return newAnimalList;
+        }
     }
 
     static List<String> flipAnimals(boolean mutate) {
-        //reverse the order of the animals in the animal list.  If the booleaen parameter is true, reverse the static animals array list by mutating the array.  if the mutate boolean is false, flip a 'copy' of the animals list, then return that list of flipped animals, WITHOUT mutating the static animals array. return the flipped list in both cases.
+        // reverse the order of the animals in the animal list.  If the booleaen parameter is true, reverse the
+        // static animals array list by mutating the array.  if the mutate boolean is false, flip a 'copy' of
+        // the animals list, then return that list of flipped animals, WITHOUT mutating the static animals
+        // array. return the flipped list in both cases.
 
         List<String> instructions = Arrays.asList("Flip","the","animals","list","."," ","Mutate","the","animals","only","if","flag","true");
-        return instructions;
+
+        List<String> flippedAnimals = new ArrayList<String>();
+        if (mutate) {
+            animals.stream()
+                    .forEach(animal -> flippedAnimals.add(0, animal));
+            animals = flippedAnimals;
+            return animals;
+        }
+        animals.stream()
+                .forEach(animal -> flippedAnimals.add(0, animal));
+        return flippedAnimals;
     }
 
+
     static List<String> sortAnimals(boolean mutate) {
-    //sort the animals in alphabetical order.  If the booleaen parameter is true, mutating the animals list.  if the mutate boolean is false, sort a 'copy' of the animals list, then return that list of sorted animals, WITHOUT mutating the static animals array. return the sorted list in both cases.
-    return animals;
+        // sort the animals in alphabetical order.  If the booleaen parameter is true, mutating the animals
+        // list.  If the mutate boolean is false, sort a 'copy' of the animals list, then return that list of
+        // sorted animals, WITHOUT mutating the static animals array. return the sorted list in both cases.
+
+        if (mutate) {
+            animals = animals.stream()
+                    .map(animal -> animal.toLowerCase())
+                    .sorted()
+                    .collect(Collectors.toList());
+            return animals;
+        }
+        List<String> newAnimals = animals.stream()
+                .map(animal -> animal.toLowerCase())
+                .sorted()
+                .collect(Collectors.toList());
+    return newAnimals;
     }
 
 
