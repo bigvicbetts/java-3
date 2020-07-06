@@ -75,7 +75,7 @@ class Animals {
         };
 
         sortAnimalsLambda(animals, sortAnimals2);
-        bonusSortAnimals(animals, "reverse alphabetical");
+        bonusSortAnimals(animals, "longest to shortest");
 
     }
 
@@ -214,9 +214,27 @@ class Animals {
                         .collect(Collectors.toList());
                 System.out.println(choice + ": " + animals);
                 return animals;
-        }
+            case "shortest to longest":
+                animals = animals.stream()
+                        .map(animal -> animal.toLowerCase())
+                        .sorted(Comparator.comparing(String::length))
+                        .collect(Collectors.toList());
+                System.out.println(choice + ": " + animals);
+                return animals;
+            case "longest to shortest":
+                List<String> flippedAnimals = new ArrayList<>();
+                animals.stream()
+                        .map(animal -> animal.toLowerCase())
+                        .sorted(Comparator.comparing(String::length))
+                        .forEach(animal -> flippedAnimals.add(0, animal));
+                animals = flippedAnimals;
+                System.out.println(choice + ": " + animals);
+                return animals;
+                }
         return animals;
+        }
+
     }
 
 
-}
+
