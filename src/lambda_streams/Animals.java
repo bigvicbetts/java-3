@@ -74,13 +74,58 @@ class Animals {
             return animals;
         };
 
+
+        // This is the beginning of my bonus section
+        takeListReturnNothing sortAnimalsAlphabetical = animals -> {
+            String choice = "Alphabetical";
+            animals = animals.stream()
+                    .map(animal -> animal.toLowerCase())
+                    .sorted()
+                    .collect(Collectors.toList());
+            System.out.println(choice + ": " + animals);
+        };
+
+        takeListReturnNothing sortAnimalsReversed = animals -> {
+            String choice = "Reversed alphabetical";
+            animals = animals.stream()
+                    .map(animal -> animal.toLowerCase())
+                    .sorted(Comparator.reverseOrder())
+                    .collect(Collectors.toList());
+            System.out.println(choice + ": " + animals);
+        };
+
+        takeListReturnNothing shortestToLongest = animals -> {
+            String choice = "Shortest to longest";
+            animals = animals.stream()
+                    .map(animal -> animal.toLowerCase())
+                    .sorted(Comparator.comparing(String::length))
+                    .collect(Collectors.toList());
+            System.out.println(choice + ": " + animals);
+        };
+
+        takeListReturnNothing longestToShortest = animals -> {
+            String choice = "Longest To shortest";
+            List<String> flippedAnimals = new ArrayList<>();
+            animals.stream()
+                    .map(animal -> animal.toLowerCase())
+                    .sorted(Comparator.comparing(String::length))
+                    .forEach(animal -> flippedAnimals.add(0, animal));
+            animals = flippedAnimals;
+            System.out.println(choice + ": " + animals);
+        };
+
+        sortAnimals(animals, sortAnimalsReversed);
+
         sortAnimalsLambda(animals, sortAnimals2);
-        bonusSortAnimals(animals, "longest to shortest");
 
     }
 
     interface takeListReturnList {
         List<String> takeAction(List<String> list);
+    }
+
+    interface takeListReturnNothing {
+        void takeAction(List<String> list);
     }
 
     static List<String> capsFirstLambda(List<String> animals, takeListReturnList capsFirst) {
@@ -198,41 +243,17 @@ class Animals {
     return newAnimals;
     }
 
-    static List<String> bonusSortAnimals(List<String> animals, String choice) {
-        switch(choice.toLowerCase()) {
-            case "alphabetical":
-                animals = animals.stream()
-                        .map(animal -> animal.toLowerCase())
-                        .sorted()
-                        .collect(Collectors.toList());
-                System.out.println(choice + ": " + animals);
-                return animals;
-            case "reverse alphabetical":
-                animals = animals.stream()
-                        .map(animal -> animal.toLowerCase())
-                        .sorted(Comparator.reverseOrder())
-                        .collect(Collectors.toList());
-                System.out.println(choice + ": " + animals);
-                return animals;
-            case "shortest to longest":
-                animals = animals.stream()
-                        .map(animal -> animal.toLowerCase())
-                        .sorted(Comparator.comparing(String::length))
-                        .collect(Collectors.toList());
-                System.out.println(choice + ": " + animals);
-                return animals;
-            case "longest to shortest":
-                List<String> flippedAnimals = new ArrayList<>();
-                animals.stream()
-                        .map(animal -> animal.toLowerCase())
-                        .sorted(Comparator.comparing(String::length))
-                        .forEach(animal -> flippedAnimals.add(0, animal));
-                animals = flippedAnimals;
-                System.out.println(choice + ": " + animals);
-                return animals;
-                }
-        return animals;
+    static void sortAnimals(List<String> animals, takeListReturnNothing choice) {
+        if (choice == null) {
+            animals = animals.stream()
+                    .map(animal -> animal.toLowerCase())
+                    .sorted()
+                    .collect(Collectors.toList());
         }
+        else {
+            choice.takeAction(animals);
+        }
+    }
 
     }
 
